@@ -1,12 +1,20 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const path = require("path");
+const path = require('path');
 
-app.use("/public", express.static(path.join(__dirname, "public")));
+app.use(express.static('public')); // Static files (CSS, JS)
 
-app.get("/", (req, res) => res.sendFile(path.join(__dirname, "views/index.html")));
-app.get("/projects", (req, res) => res.sendFile(path.join(__dirname, "views/projects.html")));
-app.get("/projects/chatbot", (req, res) => res.sendFile(path.join(__dirname, "views/chatbot.html")));
-app.get("/projects/downloader", (req, res) => res.sendFile(path.join(__dirname, "views/downloader.html")));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
 
-app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+app.get('/projects', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'projects.html'));
+});
+
+app.get('/social', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'social.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
