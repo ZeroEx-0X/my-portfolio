@@ -16,5 +16,14 @@ app.get('/social', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'social.html'));
 });
 
+// ✅ Fix: Add routes for Chatbot & Downloader pages
+app.get('/projects/chatbot', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'chatbot.html'));
+});
+
+app.get('/projects/downloader', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'downloader.html'));
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
