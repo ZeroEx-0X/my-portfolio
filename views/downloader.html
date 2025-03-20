@@ -14,15 +14,42 @@
 
     <div class="download-container">
         <input type="text" id="video-url" placeholder="Paste video URL...">
-        <button onclick="downloadVideo()">Download</button>
+        <button onclick="fetchDownloadLinks()">Download</button>
+    </div>
+
+    <div id="quality-options" class="hidden">
+        <h3>Choose Quality:</h3>
+        <div class="quality-buttons">
+            <button id="low-quality" class="low">Low Quality</button>
+            <button id="high-quality" class="high">High Quality</button>
+        </div>
     </div>
 
     <script>
-        function downloadVideo() {
+        async function fetchDownloadLinks() {
             let url = document.getElementById("video-url").value;
             if (!url) return alert("Please enter a video URL!");
 
-            window.open(`https://nayan-video-downloader.vercel.app/alldown?url=${encodeURIComponent(url)}`, "_blank");
+            try {
+                let response = await fetch(`https://nayan-video-downloader.vercel.app/alldown?url=${encodeURIComponent(url)}`);
+                let data = await response.json();
+                
+                if (data.status && data.data) {
+                    document.getElementById("quality-options").classList.remove("hidden");
+                    document.getElementById("low-quality").onclick = () => downloadVideo(data.data.low);
+                    document.getElementById("high-quality").onclick = () => downloadVideo(data.data.high);
+                } else {
+                    alert("Invalid URL or unable to fetch links!");
+                }
+            } catch (error) {
+                alert("Error fetching download links!");
+            }
+        }
+
+        function downloadVideo(link) {
+            window.open(link, "_blank");
+            document.getElementById("video-url").value = "";
+            document.getElementById("quality-options").classList.add("hidden");
         }
     </script>
 
