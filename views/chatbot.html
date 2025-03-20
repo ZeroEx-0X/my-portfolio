@@ -4,15 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zeroex Chatbot</title>
-    <link rel="stylesheet" href="/public/styles.css">
-    <script defer src="/public/script.js"></script>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>Chat with Zeroex Bot</h1>
-    <div id="chat-container">
+
+    <header>
+        <h1>Zeroex Chatbot</h1>
+    </header>
+
+    <div class="chat-container">
         <div id="chat-box"></div>
         <input type="text" id="user-input" placeholder="Type a message...">
         <button onclick="sendMessage()">Send</button>
     </div>
+
+    <script>
+        async function sendMessage() {
+            let input = document.getElementById("user-input").value;
+            if (!input) return;
+            
+            document.getElementById("chat-box").innerHTML += `<p><b>You:</b> ${input}</p>`;
+            
+            let response = await fetch("https://zerox-chat-bot-api.onrender.com/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: input })
+            });
+            
+            let data = await response.json();
+            document.getElementById("chat-box").innerHTML += `<p><b>Bot:</b> ${data.reply}</p>`;
+        }
+    </script>
+
 </body>
 </html>
