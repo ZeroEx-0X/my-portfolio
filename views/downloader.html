@@ -35,9 +35,18 @@
                 let data = await response.json();
                 
                 if (data.status && data.data) {
-                    document.getElementById("quality-options").classList.remove("hidden");
-                    document.getElementById("low-quality").onclick = () => downloadVideo(data.data.low);
-                    document.getElementById("high-quality").onclick = () => downloadVideo(data.data.high);
+                    // Ensure data contains valid download URLs for low and high quality
+                    let lowQualityUrl = data.data.low;
+                    let highQualityUrl = data.data.high;
+
+                    if (lowQualityUrl && highQualityUrl) {
+                        document.getElementById("quality-options").classList.remove("hidden");
+                        
+                        document.getElementById("low-quality").onclick = () => downloadVideo(lowQualityUrl);
+                        document.getElementById("high-quality").onclick = () => downloadVideo(highQualityUrl);
+                    } else {
+                        alert("Download links not available!");
+                    }
                 } else {
                     alert("Invalid URL or unable to fetch links!");
                 }
@@ -48,8 +57,8 @@
 
         function downloadVideo(link) {
             window.open(link, "_blank");
-            document.getElementById("video-url").value = "";
-            document.getElementById("quality-options").classList.add("hidden");
+            document.getElementById("video-url").value = ""; // Reset input
+            document.getElementById("quality-options").classList.add("hidden"); // Hide options
         }
     </script>
 
